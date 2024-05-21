@@ -8,22 +8,25 @@
 
 <div class="container body-content">
 
-  <h1 th:text="${#strings.capitalizeWords(title)}"></h1>
-
   <form th:action="@{/search/results}" method = "post">
-    <h2>Search by:</h2>
+    <h1>Search by:</h1>
 
     <p>
-            <span th:each="column : ${columns}">
-                <input
-                        type="radio"
-                        name="searchType"
-                        th:id="${column.key}"
-                        th:value="${column.key}"
-                        th:checked="${column.key == 'all'}"/>
-                <label th:for="${column.key}" th:text="${column.value}"></label>
-            </span>
-
+        <span th:each="column : ${columns}">
+            <input th:if="${lastType == null}"
+                    type="radio"
+                    name="searchType"
+                    th:id="${column.key}"
+                    th:value="${column.key}"
+                    th:checked="${column.key == 'all'}"/>
+            <input th:unless="${lastType == null}"
+                    type="radio"
+                    name="searchType"
+                    th:id="${column.key}"
+                    th:value="${column.key}"
+                    th:checked="${column.key == lastType}"/>
+            <label th:for="${column.key}" th:text="${column.value}"></label>
+        </span>
     </p>
 
     <p>
@@ -36,7 +39,7 @@
 
   <hr />
 
-  <!-- DONE #4 - Loop over the search results to display all job fields. -->
+  <h2 th:text="${#strings.capitalizeWords(title)}"></h2>
 
   <div th:replace="~{fragments :: job-table-loop}"></div>
 
